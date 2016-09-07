@@ -16,6 +16,7 @@ namespace Xamarin.Helpers
     {
         public App()
         {
+            this.InitIoC();
             this.SetNextPage<HomePage>(new TestModelData());
         }
 
@@ -62,11 +63,12 @@ namespace Xamarin.Helpers
                     }));
             }
 
-            listView.ItemSelected += (sender, args) =>
+            listView.ItemSelected += async (sender, args) =>
             {
                 if (args.SelectedItem != null)
                 {
                     listView.SelectedItem = null;
+                    await mp.Detail.DisplayAlert("Click", (string)listView.SelectedItem, "Mkay");
                 }
                 // Show the detail page.
                 mp.IsPresented = false;
