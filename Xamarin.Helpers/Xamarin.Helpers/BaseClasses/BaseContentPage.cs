@@ -42,7 +42,7 @@ namespace Xamarin.Helpers.BaseClasses
 
         public BaseContentPage()
         {
-            IsBusy = true;
+            this.IsLoading = true;
 
             try
             {
@@ -64,7 +64,7 @@ namespace Xamarin.Helpers.BaseClasses
                         }
                         catch
                         {
-                            IsBusy = false;
+                            this.IsLoading = false;
                             throw;
                         }
                     });
@@ -80,12 +80,12 @@ namespace Xamarin.Helpers.BaseClasses
                                 Device.BeginInvokeOnMainThread(() =>
                                 {
                                     this.ViewModelComplete();
-                                    IsBusy = false;
+                                    this.IsLoading = false;
                                 });
                             }
                             catch
                             {
-                                IsBusy = false;
+                                this.IsLoading = false;
                                 throw;
                             }
                         });
@@ -105,14 +105,14 @@ namespace Xamarin.Helpers.BaseClasses
                             Device.BeginInvokeOnMainThread(() =>
                             {
                                 this.ViewModelComplete();
-                                IsBusy = false;
+                                this.IsLoading = false;
 
                                 Content = GetPage();
                             });
                         }
                         catch
                         {
-                            IsBusy = false;
+                            this.IsLoading = false;
                             throw;
                         }
                     });
@@ -120,7 +120,7 @@ namespace Xamarin.Helpers.BaseClasses
             }
             catch
             {
-                IsBusy = false;
+                this.IsLoading = false;
                 throw;
             }
         }
@@ -145,6 +145,28 @@ namespace Xamarin.Helpers.BaseClasses
         public void SetModelData(object modelData)
         {
             this.ViewModel.SetModelData(modelData);
+        }
+
+        private bool isLoading = false;
+        public bool IsLoading
+        {
+            get
+            {
+                return isLoading;
+            }
+            set
+            {
+                isLoading = value;
+
+                if (value)
+                {
+                    GetApplication.ShowLoading();
+                }
+                else
+                {
+                    GetApplication.HideLoading();
+                }
+            }
         }
     }
 }

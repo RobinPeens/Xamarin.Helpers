@@ -35,5 +35,27 @@ namespace Xamarin.Helpers.BaseClasses
         public abstract Task Start();
 
         public virtual void SetModelData(object modelData) { }
+
+        private bool isLoading = false;
+        public bool IsLoading
+        {
+            get
+            {
+                return isLoading;
+            }
+            set
+            {
+                isLoading = value;
+
+                if (value)
+                {
+                    GetApplication.ShowLoading();
+                }
+                else
+                {
+                    GetApplication.HideLoading();
+                }
+            }
+        }
     }
 }

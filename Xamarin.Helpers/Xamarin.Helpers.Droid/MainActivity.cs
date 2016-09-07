@@ -8,6 +8,7 @@ using Android.OS;
 using Android.Graphics.Drawables;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
+using Acr.UserDialogs;
 
 namespace Xamarin.Helpers.Droid
 {
@@ -19,6 +20,9 @@ namespace Xamarin.Helpers.Droid
             base.OnCreate(bundle);
             global::Xamarin.Forms.Forms.Init(this, bundle);
             //ActionBar.SetIcon(new ColorDrawable(Color.Transparent.ToAndroid()));
+
+            UserDialogs.Init(this);
+
             LoadApplication(new App());
         }
     }

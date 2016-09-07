@@ -9,6 +9,13 @@ using Xamarin.Helpers.BaseClasses;
 
 public static class ApplicationExtensions
 {
+
+    private static Page GetPage(IPage page)
+    {
+        Page pg = (Page) page;
+        return pg;
+    }
+
     public static void SetNextPage<TPage>(this Application application, object modelData = null) where TPage : IPage, new()
     {
         TPage tmpPage = new TPage();
@@ -21,16 +28,16 @@ public static class ApplicationExtensions
         {
             if (application.MainPage is MasterDetailPage)
             {
-                (application.MainPage as MasterDetailPage).Detail = new NavigationPage((Page)nextPage);
+                (application.MainPage as MasterDetailPage).Detail = new NavigationPage(GetPage(nextPage));
             }
             else
             {
-                application.MainPage = ((App)application).GetMasterPage((Page)nextPage);
+                application.MainPage = ((App)application).GetMasterPage(GetPage(nextPage));
             }
         }
         else
         {
-            application.MainPage = new NavigationPage((Page)nextPage);
+            application.MainPage = new NavigationPage(GetPage(nextPage));
         }
     }
 
@@ -42,6 +49,6 @@ public static class ApplicationExtensions
         if (modelData != null)
             nextPage.SetModelData(modelData);
 
-        application.MainPage.Navigation.PushAsync(new NavigationPage((Page)nextPage));
+        application.MainPage.Navigation.PushAsync(new NavigationPage(GetPage(nextPage)));
     }
 }

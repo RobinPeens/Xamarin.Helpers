@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Acr.UserDialogs;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -88,5 +89,15 @@ namespace Xamarin.Helpers
         {
             // Handle when your app resumes
         }
+
+        public void ShowLoading()
+        {
+            UserDialogs.Instance.Loading().Show();
+        }
+
+        public void HideLoading()
+        {
+            UserDialogs.Instance.Loading().Hide();
+        } 
     }
 }
