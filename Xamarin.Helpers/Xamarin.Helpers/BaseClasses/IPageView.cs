@@ -5,7 +5,7 @@ namespace Xamarin.Helpers.BaseClasses
     public interface IPageView<TViewModel> : IPage
         where TViewModel : BaseViewModel
     {
-        App GetApplication { get; }
+        BaseApplication GetApplication { get; }
         TViewModel ViewModel { get; set; }
 
         View GetPage();

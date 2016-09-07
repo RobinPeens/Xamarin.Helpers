@@ -7,7 +7,7 @@ using Xamarin.Forms;
 using Xamarin.Helpers.BaseClasses;
 using Xamarin.Helpers.ViewModels;
 
-namespace Xamarin.Helpers
+namespace Xamarin.Helpers.Views
 {
     public class HomePage : BaseContentPage<HomePageModel>
     {

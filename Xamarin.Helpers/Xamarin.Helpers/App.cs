@@ -8,18 +8,18 @@ using System.Text;
 using Xamarin.Forms;
 using Xamarin.Helpers.BaseClasses;
 using Xamarin.Helpers.ViewModels;
+using Xamarin.Helpers.Views;
 
 namespace Xamarin.Helpers
 {
-    public class App : Application
+    public class App : BaseApplication
     {
         public App()
         {
-            this.InitIoC();
             this.SetNextPage<HomePage>(new TestModelData());
         }
 
-        public MasterDetailPage GetMasterPage(Page detailPage)
+        public override MasterDetailPage GetMasterPage(Page detailPage)
         {
             var mp = new MasterDetailPage();
             
@@ -74,30 +74,5 @@ namespace Xamarin.Helpers
 
             return mp;
         }
-
-        protected override void OnStart()
-        {
-            // Handle when your app starts
-        }
-
-        protected override void OnSleep()
-        {
-            // Handle when your app sleeps
-        }
-
-        protected override void OnResume()
-        {
-            // Handle when your app resumes
-        }
-
-        public void ShowLoading()
-        {
-            UserDialogs.Instance.Loading().Show();
-        }
-
-        public void HideLoading()
-        {
-            UserDialogs.Instance.Loading().Hide();
-        } 
     }
 }

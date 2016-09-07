@@ -17,7 +17,7 @@ namespace Xamarin.Helpers.BaseClasses
     {
         public TViewModel ViewModel { get; set; }
 
-        public App GetApplication => (App)App.Current;
+        public BaseApplication GetApplication => (BaseApplication)App.Current;
 
         public bool UseMasterPage { get; private set; } = false;
         private bool PageFirst = false;
@@ -69,45 +69,26 @@ namespace Xamarin.Helpers.BaseClasses
                         }
                     });
 
-                    if (PageFirst)
-                    {
-                        await Task.Run(async () =>
-                        {
-                            try
-                            {
-                                await this.ViewModel.Start();
-
-                                Device.BeginInvokeOnMainThread(() =>
-                                {
-                                    this.ViewModelComplete();
-                                    this.IsLoading = false;
-                                });
-                            }
-                            catch
-                            {
-                                this.IsLoading = false;
-                                throw;
-                            }
-                        });
-                    }
-                };
-
-                if (PageFirst)
-                    Content = GetPage();
-                else
-                {
-                    Task.Run(async () =>
+                    await Task.Run(async () =>
                     {
                         try
                         {
+                            if (PageFirst)
+                                Device.BeginInvokeOnMainThread(() =>
+                                {
+                                    Content = GetPage();
+                                });
+
                             await this.ViewModel.Start();
 
                             Device.BeginInvokeOnMainThread(() =>
                             {
                                 this.ViewModelComplete();
-                                this.IsLoading = false;
 
-                                Content = GetPage();
+                                if (!PageFirst)
+                                    Content = GetPage();
+
+                                this.IsLoading = false;
                             });
                         }
                         catch
@@ -116,7 +97,7 @@ namespace Xamarin.Helpers.BaseClasses
                             throw;
                         }
                     });
-                }
+                };
             }
             catch
             {

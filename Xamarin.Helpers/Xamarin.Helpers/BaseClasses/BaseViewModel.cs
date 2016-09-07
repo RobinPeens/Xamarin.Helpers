@@ -15,7 +15,7 @@ namespace Xamarin.Helpers.BaseClasses
     {
         protected Page page;
 
-        public App GetApplication => (App)App.Current;
+        public BaseApplication GetApplication => (BaseApplication)App.Current;
 
         public BaseViewModel SetPage(Page page)
         {
