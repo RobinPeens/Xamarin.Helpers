@@ -49,11 +49,17 @@ namespace Xamarin.Helpers.BaseClasses
 
                 if (value)
                 {
-                    GetApplication.ShowLoading();
+                    if (Device.OS != TargetPlatform.Windows && Device.OS != TargetPlatform.WinPhone)
+                        GetApplication.ShowLoading();
+                    else
+                        page.IsBusy = true;
                 }
                 else
                 {
-                    GetApplication.HideLoading();
+                    if (Device.OS != TargetPlatform.Windows && Device.OS != TargetPlatform.WinPhone)
+                        GetApplication.HideLoading();
+                    else
+                        page.IsBusy = false;
                 }
             }
         }

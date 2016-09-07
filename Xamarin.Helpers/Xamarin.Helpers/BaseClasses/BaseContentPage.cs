@@ -30,7 +30,7 @@ namespace Xamarin.Helpers.BaseClasses
         {
             UseMasterPage = value;
         }
-        
+
         /// <summary>
         /// Default false
         /// true = Start Model and Display Page at the same time, false = Start Model then provide Page after ViewModelReady()
@@ -160,11 +160,17 @@ namespace Xamarin.Helpers.BaseClasses
 
                 if (value)
                 {
-                    GetApplication.ShowLoading();
+                    if (Device.OS != TargetPlatform.Windows && Device.OS != TargetPlatform.WinPhone)
+                        GetApplication.ShowLoading();
+                    else
+                        IsBusy = true;
                 }
                 else
                 {
-                    GetApplication.HideLoading();
+                    if (Device.OS != TargetPlatform.Windows && Device.OS != TargetPlatform.WinPhone)
+                        GetApplication.HideLoading();
+                    else
+                        IsBusy = false;
                 }
             }
         }
