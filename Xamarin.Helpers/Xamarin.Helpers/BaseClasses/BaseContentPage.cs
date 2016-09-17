@@ -13,14 +13,14 @@ namespace Xamarin.Helpers.BaseClasses
     /// Lifecycle - 1. ViewCreated, 2. PageDisplayed 3. ViewModelComplete
     /// </summary>
     /// <typeparam name="TViewModel"></typeparam>
-    public abstract class BaseContentPage<TViewModel> : ContentPage, IPageView<TViewModel> where TViewModel : BaseViewModel
+    public abstract class BaseContentPage<TViewModel> : ContentPage, IPageView<TViewModel>
+        where TViewModel : BaseViewModel
     {
         public TViewModel ViewModel { get; set; }
 
         public BaseApplication GetApplication => (BaseApplication)App.Current;
 
         public bool UseMasterPage { get; private set; } = false;
-        private bool PageFirst = false;
 
         /// <summary>
         /// Default false
@@ -30,16 +30,7 @@ namespace Xamarin.Helpers.BaseClasses
         {
             UseMasterPage = value;
         }
-
-        /// <summary>
-        /// Default false
-        /// true = Start Model and Display Page at the same time, false = Start Model then provide Page after ViewModelReady()
-        /// </summary>
-        public void SetDisplayPageFirst(bool value)
-        {
-            PageFirst = value;
-        }
-
+        
         public BaseContentPage()
         {
             this.IsLoading = true;
@@ -53,51 +44,37 @@ namespace Xamarin.Helpers.BaseClasses
                 this.BindingContext = this.ViewModel;
 
                 this.ViewCreated();
-
-                this.Appearing += async (s, e) =>
+                
+                Task.Run(async () =>
                 {
-                    Device.BeginInvokeOnMainThread(() =>
+                    try
                     {
-                        try
-                        {
-                            this.PageDisplayed();
-                        }
-                        catch
+                        await this.ViewModel.Start();
+
+                        Device.BeginInvokeOnMainThread(() =>
                         {
                             this.IsLoading = false;
-                            throw;
-                        }
-                    });
+                            this.ViewModelComplete();
+                            
+                            Content = GetPage();
 
-                    await Task.Run(async () =>
-                    {
-                        try
-                        {
-                            if (PageFirst)
-                                Device.BeginInvokeOnMainThread(() =>
-                                {
-                                    Content = GetPage();
-                                });
-
-                            await this.ViewModel.Start();
-
-                            Device.BeginInvokeOnMainThread(() =>
+                            try
                             {
-                                this.ViewModelComplete();
-
-                                if (!PageFirst)
-                                    Content = GetPage();
-
+                                this.PageDisplayed();
+                            }
+                            catch
+                            {
                                 this.IsLoading = false;
-                            });
-                        }
-                        catch
-                        {
-                            this.IsLoading = false;
-                            throw;
-                        }
-                    });
-                };
+                                throw;
+                            }
+                        });
+                    }
+                    catch
+                    {
+                        this.IsLoading = false;
+                        throw;
+                    }
+                });
             }
             catch
             {
@@ -137,21 +114,26 @@ namespace Xamarin.Helpers.BaseClasses
             }
             set
             {
+                bool isSame = isLoading == value;
+
                 isLoading = value;
 
-                if (value)
+                if (!isSame)
                 {
-                    if (Device.OS != TargetPlatform.Windows && Device.OS != TargetPlatform.WinPhone)
-                        GetApplication.ShowLoading();
+                    if (value)
+                    {
+                        if (Device.OS != TargetPlatform.Windows && Device.OS != TargetPlatform.WinPhone)
+                            GetApplication.ShowLoading();
+                        else
+                            IsBusy = true;
+                    }
                     else
-                        IsBusy = true;
-                }
-                else
-                {
-                    if (Device.OS != TargetPlatform.Windows && Device.OS != TargetPlatform.WinPhone)
-                        GetApplication.HideLoading();
-                    else
-                        IsBusy = false;
+                    {
+                        if (Device.OS != TargetPlatform.Windows && Device.OS != TargetPlatform.WinPhone)
+                            GetApplication.HideLoading();
+                        else
+                            IsBusy = false;
+                    }
                 }
             }
         }

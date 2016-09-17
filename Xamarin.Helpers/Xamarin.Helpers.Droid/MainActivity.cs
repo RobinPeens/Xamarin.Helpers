@@ -9,6 +9,7 @@ using Android.Graphics.Drawables;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 using Acr.UserDialogs;
+using Xamarin.Helpers.Droid.Services;
 
 namespace Xamarin.Helpers.Droid
 {
@@ -18,12 +19,17 @@ namespace Xamarin.Helpers.Droid
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
+            
+            var settingsService = new SettingsService();
+            settingsService.Init(this);
+
+            var notificationHubsService = new NotificationHubsService();
+            notificationHubsService.Init(this);
+
             global::Xamarin.Forms.Forms.Init(this, bundle);
-            //ActionBar.SetIcon(new ColorDrawable(Color.Transparent.ToAndroid()));
-
             UserDialogs.Init(this);
-
-            LoadApplication(new App());
+            LoadApplication(new App(settingsService, notificationHubsService));
+            notificationHubsService.RegisterOrUpdate();
         }
     }
 }

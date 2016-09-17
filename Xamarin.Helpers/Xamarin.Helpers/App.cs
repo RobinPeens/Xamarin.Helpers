@@ -7,6 +7,7 @@ using System.Text;
 
 using Xamarin.Forms;
 using Xamarin.Helpers.BaseClasses;
+using Xamarin.Helpers.Services;
 using Xamarin.Helpers.ViewModels;
 using Xamarin.Helpers.Views;
 
@@ -14,9 +15,30 @@ namespace Xamarin.Helpers
 {
     public class App : BaseApplication
     {
-        public App()
+        public App(ISettingsService settingsService, INotificationHubsService notificationHubsService)
         {
             this.InitIoC();
+
+            if(!IoC.GetContainer.IsRegistered<ISettingsService>())
+                IoC.GetContainer.Register(() => settingsService);
+
+            if (!IoC.GetContainer.IsRegistered<INotificationHubsService>())
+                IoC.GetContainer.Register(() => notificationHubsService);
+
+
+            var ss = IoC.IoCGet<ISettingsService>();
+            var nh = IoC.IoCGet<INotificationHubsService>();
+
+            List<string> tags = new List<string>()
+            {
+                "TestTag",
+                "RobinTest",
+                "QWERTY"
+            };
+
+            ss.Tags = tags;
+            nh.RegisterOrUpdate();
+
             this.SetNextPage<HomePage>(new TestModelData());
         }
 

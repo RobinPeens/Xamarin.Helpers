@@ -12,16 +12,17 @@ public static class ApplicationExtensions
 
     private static Page GetPage(IPage page)
     {
-        Page pg = (Page) page;
+        Page pg = (Page)page;
         return pg;
     }
 
-    public static void SetNextPage<TPage>(this Application application, object modelData = null) where TPage : IPage, new()
+    public static void SetNextPage<TPage>(this Application application, object modelData = null)
+        where TPage : IPage, new()
     {
-        TPage tmpPage = new TPage();
-        IPage nextPage = tmpPage;
+        TPage tmpPage = new TPage();    // Create Page
+        IPage nextPage = tmpPage;       // Set as next page
 
-        if(modelData != null)
+        if (modelData != null)
             nextPage.SetModelData(modelData);
 
         if (nextPage.UseMasterPage)

@@ -43,6 +43,10 @@
     <Compile Include="BaseClasses\IoC.cs" />
     <Compile Include="BaseClasses\IPage.cs" />
     <Compile Include="BaseClasses\IPageView.cs" />
+    <Compile Include="Services\DownloadService.cs" />
+    <Compile Include="Services\IFileAccess.cs" />
+    <Compile Include="Services\INotificationHubsService.cs" />
+    <Compile Include="Services\ISettingsService.cs" />
     <Compile Include="Views\HomePage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\HomePageModel.cs" />
